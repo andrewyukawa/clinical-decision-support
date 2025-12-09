@@ -1,0 +1,14 @@
+[providers]
+python = "311"
+
+[phases.install]
+cmds = [
+  "pip install -r backend/requirements.txt"
+]
+
+[start]
+cmd = "cd backend && python app.py"
+
+[variables]
+PYTHONUNBUFFERED = "1"
+

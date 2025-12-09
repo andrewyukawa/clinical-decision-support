@@ -1,0 +1,9 @@
+# This file is for Railway deployment
+# Railway will use this if it detects Python at root
+# Otherwise, it will use backend/requirements.txt based on nixpacks.toml
+
+fastapi==0.104.1
+uvicorn==0.24.0
+pydantic==2.5.0
+python-multipart==0.0.6
+
