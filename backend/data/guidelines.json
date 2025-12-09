@@ -1,0 +1,47 @@
+{
+  "hfpef": {
+    "acc_aha_2022": {
+      "disease": "HFpEF",
+      "last_updated": "2022-04-01",
+      "recommendations": [
+        {
+          "therapy_class": "SGLT2 Inhibitor",
+          "recommendation_class": "Class I",
+          "level_of_evidence": "A",
+          "description": "SGLT2 inhibitors are recommended to reduce heart failure hospitalizations and cardiovascular mortality in patients with HFpEF."
+        },
+        {
+          "therapy_class": "ARNI",
+          "recommendation_class": "Class IIa",
+          "level_of_evidence": "B-R",
+          "description": "ARNI may be beneficial to reduce heart failure hospitalizations in selected patients with HFpEF."
+        },
+        {
+          "therapy_class": "ACEi/ARB",
+          "recommendation_class": "Class IIb",
+          "level_of_evidence": "C-LD",
+          "description": "ACE inhibitors or ARBs may be considered to reduce hospitalizations in patients with HFpEF."
+        }
+      ]
+    },
+    "esc_2021": {
+      "disease": "HFpEF",
+      "last_updated": "2021-08-27",
+      "recommendations": [
+        {
+          "therapy_class": "SGLT2 Inhibitor",
+          "recommendation_class": "Class I",
+          "level_of_evidence": "A",
+          "description": "SGLT2 inhibitors are recommended in patients with HFpEF to reduce the risk of HF hospitalizations and cardiovascular death."
+        },
+        {
+          "therapy_class": "ARNI",
+          "recommendation_class": "Class IIa",
+          "level_of_evidence": "B",
+          "description": "ARNI should be considered to reduce the risk of HF hospitalizations in patients with HFpEF."
+        }
+      ]
+    }
+  }
+}
+

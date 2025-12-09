@@ -1,0 +1,39 @@
+[
+  {
+    "name": "EMPEROR-Preserved",
+    "population": "5,988 patients with HFpEF (LVEF >40%)",
+    "intervention": "Empagliflozin 10 mg daily",
+    "comparator": "Placebo",
+    "primary_endpoint": "Composite of cardiovascular death or heart failure hospitalization",
+    "outcome": "21% relative risk reduction (HR 0.79, 95% CI 0.69-0.90, P<0.001)",
+    "abstract_link": "https://www.nejm.org/doi/full/10.1056/NEJMoa2107038"
+  },
+  {
+    "name": "DELIVER",
+    "population": "6,263 patients with HFpEF (LVEF >40%)",
+    "intervention": "Dapagliflozin 10 mg daily",
+    "comparator": "Placebo",
+    "primary_endpoint": "Composite of worsening HF or cardiovascular death",
+    "outcome": "18% relative risk reduction (HR 0.82, 95% CI 0.73-0.92, P<0.001)",
+    "abstract_link": "https://www.nejm.org/doi/full/10.1056/NEJMoa2206286"
+  },
+  {
+    "name": "PARAGON-HF",
+    "population": "4,822 patients with HFpEF (LVEF ≥45%)",
+    "intervention": "Sacubitril-valsartan (ARNI) 97/103 mg twice daily",
+    "comparator": "Valsartan 160 mg twice daily",
+    "primary_endpoint": "Composite of total heart failure hospitalizations and cardiovascular death",
+    "outcome": "13% relative reduction in rate of primary endpoint (RR 0.87, 95% CI 0.75-1.01, P=0.06; nominal significance)",
+    "abstract_link": "https://www.nejm.org/doi/full/10.1056/NEJMoa1908655"
+  },
+  {
+    "name": "SOLOIST-WHF",
+    "population": "1,222 patients with type 2 diabetes and worsening HF",
+    "intervention": "Sotagliflozin (SGLT1/2 inhibitor) 200-400 mg daily",
+    "comparator": "Placebo",
+    "primary_endpoint": "Composite of cardiovascular death, HF hospitalization, or urgent HF visit",
+    "outcome": "33% relative risk reduction (HR 0.67, 95% CI 0.52-0.85, P<0.001)",
+    "abstract_link": "https://www.nejm.org/doi/full/10.1056/NEJMoa2030183"
+  }
+]
+
