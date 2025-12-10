@@ -18,13 +18,13 @@ app = FastAPI(title="Curie CDS API", version="1.0.0")
 CORS_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:5173",
-    # Add your Vercel deployment URL here:
+    # Add your Vercel deployment URL here when you deploy:
     # "https://your-app.vercel.app",
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=CORS_ORIGINS,
+    allow_origins=CORS_ORIGINS + ["*"],  # Allow all for development, restrict in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
