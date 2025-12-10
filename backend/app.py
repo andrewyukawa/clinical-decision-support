@@ -14,20 +14,12 @@ from pathlib import Path
 app = FastAPI(title="Curie CDS API", version="1.0.0")
 
 # CORS middleware for frontend communication
-# CORS configuration - add your Vercel domain in production
-CORS_ORIGINS = [
-    "http://localhost:3000",
-    "http://localhost:5173",
-    # Vercel deployment domains (wildcards for preview deployments)
-    "https://clinical-decision-support*.vercel.app",
-    "https://*.vercel.app",
-]
-
+# Allow all origins for now (can restrict to specific domains later)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=CORS_ORIGINS + ["*"],  # Allow all for development, restrict in production
-    allow_credentials=True,
-    allow_methods=["*"],
+    allow_origins=["*"],  # Allow all origins
+    allow_credentials=False,  # Must be False when allow_origins is ["*"]
+    allow_methods=["GET", "POST", "OPTIONS"],  # Explicitly allow these methods
     allow_headers=["*"],
 )
 
