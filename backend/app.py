@@ -18,8 +18,9 @@ app = FastAPI(title="Curie CDS API", version="1.0.0")
 CORS_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:5173",
-    # Add your Vercel deployment URL here when you deploy:
-    # "https://your-app.vercel.app",
+    # Vercel deployment domains (wildcards for preview deployments)
+    "https://clinical-decision-support*.vercel.app",
+    "https://*.vercel.app",
 ]
 
 app.add_middleware(
