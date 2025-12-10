@@ -1,5 +1,5 @@
-[providers]
-python = "311"
+[phases.setup]
+providers = ["python"]
 
 [phases.install]
 cmds = [
