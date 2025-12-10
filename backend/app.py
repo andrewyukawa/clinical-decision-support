@@ -206,6 +206,10 @@ def generate_pathway(modifiers: PatientModifier) -> PathwayResponse:
 def root():
     return {"message": "Curie CDS API", "version": "1.0.0", "disease": "HFpEF"}
 
+@app.get("/health")
+def health():
+    return {"status": "ok", "cors": "enabled"}
+
 @app.get("/api/guidelines/metadata")
 def get_guideline_metadata():
     """Get guideline version and metadata"""
