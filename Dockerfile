@@ -14,6 +14,10 @@ RUN pip install --upgrade pip && \
 # Copy backend code
 COPY backend/ /app/backend/
 
+# Copy start script
+COPY start.sh /app/start.sh
+RUN chmod +x /app/start.sh
+
 # Expose port
 EXPOSE 8000
 
@@ -21,8 +25,5 @@ EXPOSE 8000
 ENV PYTHONUNBUFFERED=1
 
 # Run the application
-WORKDIR /app/backend
-# Railway will set PORT env var, but we need to read it in Python
-# So we use a shell script or direct python execution
-CMD python -c "import os, uvicorn; from app import app; port = int(os.environ.get('PORT', 8000)); uvicorn.run(app, host='0.0.0.0', port=port)"
+CMD ["/app/start.sh"]
 
