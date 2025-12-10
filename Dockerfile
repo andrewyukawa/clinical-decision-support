@@ -22,5 +22,7 @@ ENV PYTHONUNBUFFERED=1
 
 # Run the application
 WORKDIR /app/backend
-CMD ["python", "app.py"]
+# Railway will set PORT env var, but we need to read it in Python
+# So we use a shell script or direct python execution
+CMD python -c "import os, uvicorn; from app import app; port = int(os.environ.get('PORT', 8000)); uvicorn.run(app, host='0.0.0.0', port=port)"
 
