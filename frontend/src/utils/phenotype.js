@@ -32,6 +32,34 @@ const PHENOTYPE_PRIORITY = [
   HfpefPhenotype.HYPERTENSIVE,
 ];
 
+// Primary modifiers required for each phenotype (phenotype is invalid without these)
+const PHENOTYPE_REQUIRED_MODIFIERS = {
+  [HfpefPhenotype.FRAILTY_DOMINANT]: ['frailty'], // Frailty-dominant requires frailty
+  [HfpefPhenotype.CKD_MODIFIED]: ['ckd'], // CKD-modified requires CKD
+  [HfpefPhenotype.AFIB_PREDOMINANT]: ['afib'], // AFib-predominant requires AFib
+  [HfpefPhenotype.METABOLIC_OBESITY]: ['obesity', 'diabetes'], // Requires either obesity OR diabetes
+  [HfpefPhenotype.HYPERTENSIVE]: ['uncontrolledHypertension'], // Hypertensive requires uncontrolled HTN
+};
+
+/**
+ * Check if a phenotype is valid (has required modifiers checked)
+ * @param {string} phenotype - Phenotype to check
+ * @param {Object} modifiers - Patient modifier object
+ * @returns {boolean} True if phenotype is valid
+ */
+function isPhenotypeValid(phenotype, modifiers) {
+  const requiredModifiers = PHENOTYPE_REQUIRED_MODIFIERS[phenotype];
+  if (!requiredModifiers) return true; // No requirements = always valid
+  
+  // For METABOLIC_OBESITY, at least one of obesity OR diabetes must be checked
+  if (phenotype === HfpefPhenotype.METABOLIC_OBESITY) {
+    return modifiers.obesity || modifiers.diabetes;
+  }
+  
+  // For others, the primary modifier must be checked
+  return requiredModifiers.some(mod => modifiers[mod] === true);
+}
+
 /**
  * Infer primary HFpEF phenotype from patient modifiers
  * @param {Object} modifiers - Patient modifier object
@@ -93,9 +121,24 @@ export function inferHfpefPhenotype(modifiers) {
     return { primaryPhenotype: null, scores, drivers: [] };
   }
 
-  const primaryPhenotype = PHENOTYPE_PRIORITY.find(
-    (p) => scores[p] === maxScore
-  ) || null;
+  // Find phenotypes with max score, but only consider valid ones (with required modifiers)
+  const candidatesWithMaxScore = PHENOTYPE_PRIORITY.filter(
+    (p) => scores[p] === maxScore && isPhenotypeValid(p, modifiers)
+  );
+
+  // If no valid phenotype has max score, find the highest valid phenotype
+  let primaryPhenotype = null;
+  if (candidatesWithMaxScore.length > 0) {
+    primaryPhenotype = candidatesWithMaxScore[0]; // Use priority order
+  } else {
+    // Fallback: find highest scoring valid phenotype
+    const validPhenotypes = PHENOTYPE_PRIORITY.filter(p => isPhenotypeValid(p, modifiers));
+    if (validPhenotypes.length > 0) {
+      primaryPhenotype = validPhenotypes.reduce((max, p) => 
+        scores[p] > scores[max] ? p : max
+      );
+    }
+  }
 
   // Compute drivers: modifiers that contributed to the primary phenotype
   const drivers = [];
