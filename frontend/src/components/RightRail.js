@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { GUIDELINE_CITATIONS, getCitationById } from '../utils/citations';
+import { GUIDELINE_CITATIONS } from '../utils/citations';
 
 function RightRail({ pathway, phenotypeResult, activeTab: controlledTab, onTabChange, highlightedId }) {
   const [internalTab, setInternalTab] = useState('trials');
