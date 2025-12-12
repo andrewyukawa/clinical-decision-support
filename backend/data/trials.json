@@ -1,5 +1,6 @@
 [
   {
+    "id": "T1",
     "name": "EMPEROR-Preserved",
     "population": "5,988 patients with HFpEF (LVEF >40%)",
     "intervention": "Empagliflozin 10 mg daily",
@@ -14,6 +15,7 @@
     }
   },
   {
+    "id": "T2",
     "name": "DELIVER",
     "population": "6,263 patients with HFpEF (LVEF >40%)",
     "intervention": "Dapagliflozin 10 mg daily",
@@ -27,6 +29,7 @@
     }
   },
   {
+    "id": "T3",
     "name": "PARAGON-HF",
     "population": "4,822 patients with HFpEF (LVEF ≥45%)",
     "intervention": "Sacubitril-valsartan (ARNI) 97/103 mg twice daily",
@@ -41,6 +44,7 @@
     }
   },
   {
+    "id": "T4",
     "name": "SOLOIST-WHF",
     "population": "1,222 patients with type 2 diabetes and worsening HF",
     "intervention": "Sotagliflozin (SGLT1/2 inhibitor) 200-400 mg daily",

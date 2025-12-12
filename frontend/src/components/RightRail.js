@@ -1,7 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { GUIDELINE_CITATIONS, getCitationById } from '../utils/citations';
 
-function RightRail({ pathway, phenotypeResult }) {
-  const [activeTab, setActiveTab] = useState('guidelines');
+function RightRail({ pathway, phenotypeResult, activeTab: controlledTab, onTabChange, highlightedId }) {
+  const [internalTab, setInternalTab] = useState('trials');
+  const citationRefs = useRef({});
+  const trialRefs = useRef({});
+
+  // Use controlled tab if provided, otherwise use internal state
+  const activeTab = controlledTab !== undefined ? controlledTab : internalTab;
+  const setActiveTab = onTabChange || setInternalTab;
+
+  // Scroll and highlight when highlightedId changes
+  useEffect(() => {
+    if (highlightedId) {
+      if (highlightedId.startsWith('G')) {
+        setActiveTab('citations');
+        setTimeout(() => {
+          const element = citationRefs.current[highlightedId];
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            element.classList.add('highlighted');
+            setTimeout(() => {
+              element.classList.remove('highlighted');
+            }, 1500);
+          }
+        }, 100);
+      } else if (highlightedId.startsWith('T')) {
+        setActiveTab('trials');
+        setTimeout(() => {
+          const element = trialRefs.current[highlightedId];
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            element.classList.add('highlighted');
+            setTimeout(() => {
+              element.classList.remove('highlighted');
+            }, 1500);
+          }
+        }, 100);
+      }
+    }
+  }, [highlightedId, setActiveTab]);
 
   if (!pathway) {
     return (
@@ -17,10 +55,10 @@ function RightRail({ pathway, phenotypeResult }) {
       
       <div className="tabs">
         <div
-          className={`tab ${activeTab === 'guidelines' ? 'active' : ''}`}
-          onClick={() => setActiveTab('guidelines')}
+          className={`tab ${activeTab === 'citations' ? 'active' : ''}`}
+          onClick={() => setActiveTab('citations')}
         >
-          Guideline Basis
+          Citations
         </div>
         <div
           className={`tab ${activeTab === 'trials' ? 'active' : ''}`}
@@ -28,25 +66,45 @@ function RightRail({ pathway, phenotypeResult }) {
         >
           Key Trials
         </div>
-        <div
-          className={`tab ${activeTab === 'recent' ? 'active' : ''}`}
-          onClick={() => setActiveTab('recent')}
-        >
-          Recent Changes
-        </div>
       </div>
 
       <div className="tab-content">
-        {activeTab === 'guidelines' && (
+        {activeTab === 'citations' && (
           <div className="evidence-section">
-            <div className="section-title">Guideline Sources</div>
-            {pathway.guideline_sources?.map((source, idx) => (
-              <div key={idx} className="guideline-source">
-                {source}
+            <div className="section-title">Citations</div>
+            {GUIDELINE_CITATIONS.map((citation) => (
+              <div
+                key={citation.id}
+                ref={el => citationRefs.current[citation.id] = el}
+                className={`citation-card ${highlightedId === citation.id ? 'highlighted' : ''}`}
+              >
+                <div className="citation-id">{citation.id}</div>
+                <div className="citation-source-name">
+                  <strong>{citation.sourceName}</strong>
+                </div>
+                {citation.section && (
+                  <div className="citation-section">{citation.section}</div>
+                )}
+                <div className="citation-excerpt">{citation.excerpt}</div>
+                {citation.location && (
+                  <div className="citation-location">
+                    <small>{citation.location}</small>
+                  </div>
+                )}
+                {citation.url && (
+                  <a
+                    href={citation.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="citation-link"
+                  >
+                    Open Source →
+                  </a>
+                )}
               </div>
             ))}
-            <div className="guideline-source" style={{ marginTop: '16px' }}>
-              <strong>Last Updated:</strong> {pathway.last_updated}
+            <div className="citation-card" style={{ marginTop: '16px', opacity: 0.7 }}>
+              <small><strong>Last Updated:</strong> {pathway.last_updated}</small>
             </div>
           </div>
         )}
@@ -54,9 +112,15 @@ function RightRail({ pathway, phenotypeResult }) {
         {activeTab === 'trials' && (
           <div className="evidence-section">
             <div className="section-title">Supporting Trials</div>
-            {pathway.trial_support?.map((trial, idx) => (
-              <div key={idx} className="trial-card">
-                <div className="trial-name">{trial.name}</div>
+            {pathway.trial_support?.map((trial, idx) => {
+              const trialId = trial.id || `T${idx + 1}`;
+              return (
+                <div
+                  key={idx}
+                  ref={el => trialRefs.current[trialId] = el}
+                  className={`trial-card ${highlightedId === trialId ? 'highlighted' : ''}`}
+                >
+                  <div className="trial-name">{trial.name}</div>
                 <div className="trial-field">
                   <strong>Population:</strong> {trial.population}
                 </div>
@@ -93,23 +157,9 @@ function RightRail({ pathway, phenotypeResult }) {
                     View Abstract →
                   </a>
                 )}
-              </div>
-            ))}
-          </div>
-        )}
-
-        {activeTab === 'recent' && (
-          <div className="evidence-section">
-            <div className="section-title">Recent Changes</div>
-            <div className="guideline-source">
-              <strong>2022:</strong> SGLT2 inhibitors elevated to Class I, Level A recommendation for HFpEF based on EMPEROR-Preserved and DELIVER trials.
-            </div>
-            <div className="guideline-source" style={{ marginTop: '12px' }}>
-              <strong>2021:</strong> ARNI (sacubitril-valsartan) received Class IIa recommendation for selected HFpEF patients based on PARAGON-HF trial.
-            </div>
-            <div className="guideline-source" style={{ marginTop: '12px' }}>
-              <strong>2020:</strong> Focus shifted from symptom management to disease-modifying therapies with proven outcomes.
-            </div>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>

@@ -1,8 +1,9 @@
 import React from 'react';
 import { PHENOTYPE_LABELS } from '../utils/phenotype';
-import { getStepPhenotypeNote } from '../utils/stepPhenotypeNotes';
+import { formatDrivers } from '../utils/citations';
+import { getWhyBulletsForStep } from '../utils/stepConfig';
 
-function MainPanel({ pathway, loading, error, phenotypeResult, activeModifierLabels }) {
+function MainPanel({ pathway, loading, error, phenotypeResult, activeModifierLabels, onCitationClick }) {
   if (loading && !pathway) {
     return (
       <div className="main-panel">
@@ -39,12 +40,16 @@ function MainPanel({ pathway, loading, error, phenotypeResult, activeModifierLab
 
       {/* Phenotype Badge */}
       <div className="phenotype-badge-container">
-        {phenotypeResult.primaryPhenotype ? (
-          <div 
-            className="phenotype-badge"
-            title={`Based on: ${activeModifierLabels.join(', ')}`}
-          >
-            Phenotype detected: {PHENOTYPE_LABELS[phenotypeResult.primaryPhenotype]}
+        {phenotypeResult?.primaryPhenotype ? (
+          <div className="phenotype-badge-wrapper">
+            <div className="phenotype-badge">
+              Phenotype detected: {PHENOTYPE_LABELS[phenotypeResult.primaryPhenotype]}
+            </div>
+            {phenotypeResult.drivers && phenotypeResult.drivers.length > 0 && (
+              <div className="phenotype-drivers">
+                Drivers: {formatDrivers(phenotypeResult.drivers)}
+              </div>
+            )}
           </div>
         ) : (
           <div className="phenotype-badge phenotype-not-specified">
@@ -80,19 +85,37 @@ function MainPanel({ pathway, loading, error, phenotypeResult, activeModifierLab
               <div className="step-rationale">{step.rationale}</div>
 
               {/* Why this is recommended section */}
-              {(step.why_recommended || getStepPhenotypeNote(step.step_number, phenotypeResult?.primaryPhenotype)) && (
-                <div className="why-section">
-                  <h5>Why this is recommended</h5>
-                  <ul>
-                    {step.why_recommended?.map((bullet, idx) => (
-                      <li key={idx}>{bullet}</li>
-                    ))}
-                    {getStepPhenotypeNote(step.step_number, phenotypeResult?.primaryPhenotype) && (
-                      <li>{getStepPhenotypeNote(step.step_number, phenotypeResult.primaryPhenotype)}</li>
-                    )}
-                  </ul>
-                </div>
-              )}
+              {(() => {
+                const whyBullets = getWhyBulletsForStep(step.step_number, phenotypeResult?.primaryPhenotype);
+                if (whyBullets.length === 0) return null;
+                
+                return (
+                  <div className="why-section">
+                    <h5>Why this is recommended</h5>
+                    <ul>
+                      {whyBullets.map((bullet, idx) => (
+                        <li key={idx}>
+                          {bullet.text}
+                          {bullet.citations && bullet.citations.length > 0 && (
+                            <span className="citation-chips">
+                              {bullet.citations.map((citationId, cidx) => (
+                                <button
+                                  key={cidx}
+                                  className="citation-chip"
+                                  onClick={() => onCitationClick && onCitationClick(citationId)}
+                                  aria-label={`View citation ${citationId}`}
+                                >
+                                  [{citationId}]
+                                </button>
+                              ))}
+                            </span>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })()}
 
               {step.warning && (
                 <div className="step-warning">

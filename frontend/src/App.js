@@ -23,9 +23,25 @@ function App() {
   const [metadata, setMetadata] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeEvidenceTab, setActiveEvidenceTab] = useState('trials'); // 'trials' or 'citations'
+  const [highlightedId, setHighlightedId] = useState(null);
 
   // Infer phenotype whenever modifiers change
   const phenotypeResult = useMemo(() => inferHfpefPhenotype(modifiers), [modifiers]);
+
+  // Handle citation chip clicks
+  const handleCitationClick = (citationId) => {
+    if (citationId.startsWith('G')) {
+      setActiveEvidenceTab('citations');
+      setHighlightedId(citationId);
+      // Scroll and highlight will be handled by RightRail component
+      setTimeout(() => setHighlightedId(null), 1500);
+    } else if (citationId.startsWith('T')) {
+      setActiveEvidenceTab('trials');
+      setHighlightedId(citationId);
+      setTimeout(() => setHighlightedId(null), 1500);
+    }
+  };
 
   useEffect(() => {
     // Load guideline metadata
@@ -87,10 +103,14 @@ function App() {
           error={error}
           phenotypeResult={phenotypeResult}
           activeModifierLabels={getActiveModifierLabels(modifiers)}
+          onCitationClick={handleCitationClick}
         />
         <RightRail 
           pathway={pathway}
           phenotypeResult={phenotypeResult}
+          activeTab={activeEvidenceTab}
+          onTabChange={setActiveEvidenceTab}
+          highlightedId={highlightedId}
         />
       </div>
       <Footer />
