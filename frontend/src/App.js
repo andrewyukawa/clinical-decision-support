@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import './App.css';
 import TopBar from './components/TopBar';
 import LeftRail from './components/LeftRail';
@@ -6,6 +6,7 @@ import MainPanel from './components/MainPanel';
 import RightRail from './components/RightRail';
 import Footer from './components/Footer';
 import { getPathway, getGuidelineMetadata } from './services/api';
+import { inferHfpefPhenotype, getActiveModifierLabels } from './utils/phenotype';
 
 function App() {
   const [modifiers, setModifiers] = useState({
@@ -13,13 +14,18 @@ function App() {
     hypotension: false,
     afib: false,
     diabetes: false,
-    frailty: false
+    frailty: false,
+    obesity: false,
+    uncontrolledHypertension: false
   });
 
   const [pathway, setPathway] = useState(null);
   const [metadata, setMetadata] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Infer phenotype whenever modifiers change
+  const phenotypeResult = useMemo(() => inferHfpefPhenotype(modifiers), [modifiers]);
 
   useEffect(() => {
     // Load guideline metadata
@@ -75,8 +81,17 @@ function App() {
           modifiers={modifiers} 
           onModifierChange={handleModifierChange} 
         />
-        <MainPanel pathway={pathway} loading={loading} error={error} />
-        <RightRail pathway={pathway} />
+        <MainPanel 
+          pathway={pathway} 
+          loading={loading} 
+          error={error}
+          phenotypeResult={phenotypeResult}
+          activeModifierLabels={getActiveModifierLabels(modifiers)}
+        />
+        <RightRail 
+          pathway={pathway}
+          phenotypeResult={phenotypeResult}
+        />
       </div>
       <Footer />
     </div>

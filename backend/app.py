@@ -30,6 +30,8 @@ class PatientModifier(BaseModel):
     afib: bool = False  # Atrial fibrillation present
     diabetes: bool = False  # Diabetes present
     frailty: bool = False  # Advanced frailty
+    obesity: bool = False  # Obesity
+    uncontrolledHypertension: bool = False  # Uncontrolled hypertension (e.g. SBP > target)
 
 class PathwayRequest(BaseModel):
     disease: str = "HFpEF"  # Locked for v1
@@ -45,6 +47,8 @@ class PathwayStep(BaseModel):
     contraindicated: bool = False
     priority: bool = False
     warning: Optional[str] = None
+    why_recommended: Optional[List[str]] = None  # Guideline and evidence bullets
+    phenotype_note: Optional[str] = None  # Phenotype-specific note
 
 class Trial(BaseModel):
     name: str
@@ -54,6 +58,8 @@ class Trial(BaseModel):
     primary_endpoint: str
     outcome: str
     abstract_link: Optional[str] = None
+    relevance_general: Optional[str] = None
+    relevance_by_phenotype: Optional[Dict[str, str]] = None
 
 class PathwayResponse(BaseModel):
     clinical_summary: str
@@ -121,10 +127,32 @@ def generate_pathway(modifiers: PatientModifier) -> PathwayResponse:
         }
     ]
     
+    # Infer phenotype (simplified client-side version - for now just pass modifiers)
+    # In a full implementation, this would be done here, but keeping it client-side for v1
+    
     # Apply modifier-based filtering
     steps = []
     for step_data in base_steps:
-        step = PathwayStep(**step_data)
+        step_dict = step_data.copy()
+        
+        # Add why_recommended bullets
+        if step_dict["step_number"] == 1:
+            step_dict["why_recommended"] = [
+                "Guideline: ACC/AHA Class I, Level A for HFpEF.",
+                "Evidence: Supported by EMPEROR-Preserved and DELIVER trials."
+            ]
+        elif step_dict["step_number"] == 2:
+            step_dict["why_recommended"] = [
+                "Guideline: ACC/AHA Class IIa, Level B-R for HFpEF.",
+                "Evidence: PARAGON-HF trial demonstrated benefit in selected patients."
+            ]
+        elif step_dict["step_number"] == 3:
+            step_dict["why_recommended"] = [
+                "Guideline: ACC/AHA Class IIb, Level C-LD for HFpEF.",
+                "Evidence: Individualized approach based on comorbidities and patient factors."
+            ]
+        
+        step = PathwayStep(**step_dict)
         
         # Apply contraindications and warnings
         if modifiers.ckd and step.step_number == 2:
@@ -160,7 +188,9 @@ def generate_pathway(modifiers: PatientModifier) -> PathwayResponse:
         "Hypotension": modifiers.hypotension,
         "Atrial Fibrillation": modifiers.afib,
         "Diabetes": modifiers.diabetes,
-        "Advanced Frailty": modifiers.frailty
+        "Advanced Frailty": modifiers.frailty,
+        "Obesity": modifiers.obesity,
+        "Uncontrolled Hypertension": modifiers.uncontrolledHypertension
     }
     
     modifier_list = [k for k, v in active_modifiers.items() if v]

@@ -21,6 +21,14 @@ function LeftRail({ modifiers, onModifierChange }) {
     {
       key: 'frailty',
       label: 'Advanced frailty'
+    },
+    {
+      key: 'obesity',
+      label: 'Obesity'
+    },
+    {
+      key: 'uncontrolledHypertension',
+      label: 'Uncontrolled hypertension (SBP > target)'
     }
   ];
 

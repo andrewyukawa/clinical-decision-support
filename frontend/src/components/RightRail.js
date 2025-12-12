@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function RightRail({ pathway }) {
+function RightRail({ pathway, phenotypeResult }) {
   const [activeTab, setActiveTab] = useState('guidelines');
 
   if (!pathway) {
@@ -72,6 +72,17 @@ function RightRail({ pathway }) {
                 <div className="trial-field">
                   <strong>Outcome:</strong> {trial.outcome}
                 </div>
+                {trial.relevance_general && (
+                  <div className="trial-field">
+                    <strong>Relevance:</strong> {trial.relevance_general}
+                  </div>
+                )}
+                {phenotypeResult?.primaryPhenotype && 
+                 trial.relevance_by_phenotype?.[phenotypeResult.primaryPhenotype] && (
+                  <div className="trial-field trial-phenotype-note">
+                    {trial.relevance_by_phenotype[phenotypeResult.primaryPhenotype]}
+                  </div>
+                )}
                 {trial.abstract_link && (
                   <a
                     href={trial.abstract_link}

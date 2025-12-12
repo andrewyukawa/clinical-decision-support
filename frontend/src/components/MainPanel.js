@@ -1,6 +1,8 @@
 import React from 'react';
+import { PHENOTYPE_LABELS } from '../utils/phenotype';
+import { getStepPhenotypeNote } from '../utils/stepPhenotypeNotes';
 
-function MainPanel({ pathway, loading, error }) {
+function MainPanel({ pathway, loading, error, phenotypeResult, activeModifierLabels }) {
   if (loading && !pathway) {
     return (
       <div className="main-panel">
@@ -35,6 +37,22 @@ function MainPanel({ pathway, loading, error }) {
         {pathway.clinical_summary}
       </div>
 
+      {/* Phenotype Badge */}
+      <div className="phenotype-badge-container">
+        {phenotypeResult.primaryPhenotype ? (
+          <div 
+            className="phenotype-badge"
+            title={`Based on: ${activeModifierLabels.join(', ')}`}
+          >
+            Phenotype detected: {PHENOTYPE_LABELS[phenotypeResult.primaryPhenotype]}
+          </div>
+        ) : (
+          <div className="phenotype-badge phenotype-not-specified">
+            Phenotype not specified
+          </div>
+        )}
+      </div>
+
       <div className="pathway-steps">
         {pathway.steps.map((step) => {
           const stepClass = `pathway-step ${
@@ -60,6 +78,21 @@ function MainPanel({ pathway, loading, error }) {
               </div>
 
               <div className="step-rationale">{step.rationale}</div>
+
+              {/* Why this is recommended section */}
+              {(step.why_recommended || getStepPhenotypeNote(step.step_number, phenotypeResult?.primaryPhenotype)) && (
+                <div className="why-section">
+                  <h5>Why this is recommended</h5>
+                  <ul>
+                    {step.why_recommended?.map((bullet, idx) => (
+                      <li key={idx}>{bullet}</li>
+                    ))}
+                    {getStepPhenotypeNote(step.step_number, phenotypeResult?.primaryPhenotype) && (
+                      <li>{getStepPhenotypeNote(step.step_number, phenotypeResult.primaryPhenotype)}</li>
+                    )}
+                  </ul>
+                </div>
+              )}
 
               {step.warning && (
                 <div className="step-warning">

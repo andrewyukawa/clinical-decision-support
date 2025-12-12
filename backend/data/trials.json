@@ -6,7 +6,12 @@
     "comparator": "Placebo",
     "primary_endpoint": "Composite of cardiovascular death or heart failure hospitalization",
     "outcome": "21% relative risk reduction (HR 0.79, 95% CI 0.69-0.90, P<0.001)",
-    "abstract_link": "https://www.nejm.org/doi/full/10.1056/NEJMoa2107038"
+    "abstract_link": "https://www.nejm.org/doi/full/10.1056/NEJMoa2107038",
+    "relevance_general": "Supports use of SGLT2 inhibitors as foundational therapy in HFpEF by reducing HF hospitalizations.",
+    "relevance_by_phenotype": {
+      "frailty_dominant": "Benefits were preserved in older, frail patients; good tolerance profile supports use in this phenotype.",
+      "ckd_modified": "Efficacy and safety were maintained across CKD subgroups, supporting use in CKD-modified HFpEF."
+    }
   },
   {
     "name": "DELIVER",
@@ -15,7 +20,11 @@
     "comparator": "Placebo",
     "primary_endpoint": "Composite of worsening HF or cardiovascular death",
     "outcome": "18% relative risk reduction (HR 0.82, 95% CI 0.73-0.92, P<0.001)",
-    "abstract_link": "https://www.nejm.org/doi/full/10.1056/NEJMoa2206286"
+    "abstract_link": "https://www.nejm.org/doi/full/10.1056/NEJMoa2206286",
+    "relevance_general": "Confirms SGLT2 inhibitor benefit in HFpEF, consistent across patient subgroups.",
+    "relevance_by_phenotype": {
+      "metabolic_obesity": "Particularly relevant in patients with metabolic risk factors and obesity-related HFpEF."
+    }
   },
   {
     "name": "PARAGON-HF",
@@ -24,7 +33,12 @@
     "comparator": "Valsartan 160 mg twice daily",
     "primary_endpoint": "Composite of total heart failure hospitalizations and cardiovascular death",
     "outcome": "13% relative reduction in rate of primary endpoint (RR 0.87, 95% CI 0.75-1.01, P=0.06; nominal significance)",
-    "abstract_link": "https://www.nejm.org/doi/full/10.1056/NEJMoa1908655"
+    "abstract_link": "https://www.nejm.org/doi/full/10.1056/NEJMoa1908655",
+    "relevance_general": "ARNI demonstrated benefit in selected HFpEF patients, particularly in those with higher NT-proBNP.",
+    "relevance_by_phenotype": {
+      "frailty_dominant": "In frailty-dominant HFpEF, consider slower titration and closer BP monitoring.",
+      "ckd_modified": "In CKD-modified HFpEF, monitor renal function and potassium closely when initiating ARNI."
+    }
   },
   {
     "name": "SOLOIST-WHF",
@@ -33,7 +47,11 @@
     "comparator": "Placebo",
     "primary_endpoint": "Composite of cardiovascular death, HF hospitalization, or urgent HF visit",
     "outcome": "33% relative risk reduction (HR 0.67, 95% CI 0.52-0.85, P<0.001)",
-    "abstract_link": "https://www.nejm.org/doi/full/10.1056/NEJMoa2030183"
+    "abstract_link": "https://www.nejm.org/doi/full/10.1056/NEJMoa2030183",
+    "relevance_general": "Supports SGLT2 inhibitor use in patients with diabetes and HFpEF.",
+    "relevance_by_phenotype": {
+      "metabolic_obesity": "Particularly relevant for patients with metabolic/obesity phenotype and diabetes."
+    }
   }
 ]
 
